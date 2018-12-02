@@ -1,0 +1,19 @@
+#!/bin/bash
+clear
+dice=$HOME/.local/share/dice/
+ran=$(echo $RANDOM % 6 + 1 | bc)
+if [ $ran = 6 ]; then
+	figlet Six
+elif [ $ran = 5 ]; then
+	figlet Five
+elif [ $ran = 4 ]; then
+	figlet Four
+elif [ $ran = 3 ]; then
+	figlet Three
+elif [ $ran = 2 ]; then
+	figlet Two
+else
+	figlet One
+fi
+cat $dice$ran
+exit 0

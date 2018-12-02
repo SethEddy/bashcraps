@@ -1,0 +1,21 @@
+#!/bin/bash
+clear
+dice=$HOME/.local/share/dice/
+
+function shake {
+	ran0=$(echo $RANDOM % 6 + 1 | bc)
+	ran1=$(echo $RANDOM % 6 + 1 | bc)
+	cat $dice$ran0
+	cat $dice$ran1
+}
+function role {
+	for n in {1..30}; do
+	shake;
+	sleep .1;
+	clear;
+	done
+	shake
+}
+
+role
+exit 0

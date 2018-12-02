@@ -1,0 +1,104 @@
+#!/bin/bash
+clear
+dice=$HOME/.local/share/dice/
+t=0
+function shake {
+	ran0=$(echo $RANDOM % 6 + 1 | bc)
+	ran1=$(echo $RANDOM % 6 + 1 | bc)
+	cat $dice$ran0
+	cat $dice$ran1
+}
+function role {
+	for n in {1..30}; do
+	shake;
+	sleep .1;
+	clear;
+	done
+	shake
+}
+read -r -p 'Press any key to role dice' -n1 response
+while true; do
+if [ "$response" = 'q' ]; then
+	clear
+	echo "You can't win if you don't play"
+	echo "You won $i times this round"
+	echo "$t wins in total"
+	sleep 3
+	echo "Good Bye"
+	exit 0
+else
+	i=0
+	clear
+	echo
+	role
+	both_diceFR=$(echo $ran0$ran1)
+	dice_sumFR=$(( $ran0 + $ran1 ))
+	echo "You roled $dice_sumFR"
+	if [ both_diceFR = 11 ]; then
+		figlet '     Snake Eyes'
+		#cat $HOME/.local/share/asciiArt/skull
+		#figlet '      You Lose'
+	elif [ $dice_sumFR = 7 ] || [ $dice_sumFR = 11 ]; then
+		((i++))
+		((t++))
+		figlet ' You Win!!'
+		#cat /home/kronos/.local/share/asciiArt/balloons-you-win
+	else
+		first_role=$dice_sumFR
+		while true; do
+			read -p "Press any key to role again" -n1 response
+			while true; do
+				if [ "$response" = 'q' ]; then 
+					clear
+					echo "You can't win if you don't play"
+					echo "You won $i times this round"
+					echo "$t wins in total"
+					sleep 3
+					echo "Good Bye"
+					exit 0
+				else
+					clear
+					echo
+					role
+					both_dice=$(echo $ran0$ran1)
+					dice_sum=$(( $ran0 + $ran1 ))
+					echo "Roling for $first_role"
+					echo "You roled  $dice_sum"
+					if [ $both_dice = 11 ]; then
+						figlet '     Snake Eyes'
+						#cat $HOME/.local/share/asciiArt/skull
+						#figlet '      You Lose'
+						break
+					elif [ $dice_sum = 7 ]; then
+						#figlet '           Seven'
+						#cat $HOME/.local/share/asciiArt/skull
+						figlet '      You Lose'
+						break
+					elif [ $dice_sum = 11 ]; then
+						#figlet '           Eleven'
+						#cat $HOME/.local/share/asciiArt/skull
+						figlet '      You Lose'
+						break
+					elif [ "$first_role" = "$dice_sum" ]; then
+						((i++))
+						((t++))
+						figlet ' You Win!!'
+						#cat /home/kronos/.local/share/asciiArt/balloons-you-win
+						read -r -p "Press any key to keep going" -n1 -s
+						clear
+					else
+						:
+					fi
+				fi
+			done
+			:
+			break
+		done
+	fi
+	echo "You won $i times this round"
+	echo "$t wins in total"
+	read -r -p "Press any key to keep going" -n1 -s
+fi
+done
+clear
+exit 0
